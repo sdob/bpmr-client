@@ -3,5 +3,7 @@ $palette-1: #2b3595;
 $palette-2: #7045af;
 $palette-3: #e14594;
 
-$body-background-color: $palette-0;
+$spotify-background-color: #222326;
+
+$body-background-color: $spotify-background-color;
 $body-color: lighten($palette-3, 90%);
