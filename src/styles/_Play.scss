@@ -3,6 +3,7 @@
 .Play {
   align-items: center;
   display: flex;
+  flex-direction: column;
   min-height: calc(100vh - #{$navbar-height});
   justify-content: center;
   left: 0;

@@ -1,22 +1,30 @@
 import React, { Component } from 'react';
 import { AppState } from "../App";
 import { connect } from "react-redux";
-import { fetchTracks } from "./actions";
+import { fetchTracks, startNextTrack } from "./actions";
+import { Track } from "./types";
 
 interface PlayProps {
   dispatch: Function;
   loading: boolean;
+  tracks: Track[];
 }
 
 export class Play extends Component<PlayProps> {
-  componentDidMount = () => {
+  componentDidMount = async () => {
     const { dispatch } = this.props;
-    dispatch(fetchTracks());
+    await dispatch(fetchTracks());
+  }
+
+  handleClick = async () => {
+    const { dispatch } = this.props;
+    await dispatch(startNextTrack());
   }
 
   render = () => {
-    const { loading } = this.props;
-    if (loading) {
+    const { loading, tracks } = this.props;
+    const [currentTrack,] = tracks;
+    if (loading || !tracks.length) {
       return (
         <div className="Play Play--loading">
           <h1>
@@ -25,14 +33,26 @@ export class Play extends Component<PlayProps> {
         </div>
       );
     }
+
     return (
       <div className="Play">
-        let's play
+        What's the bpm of
+        <div>
+          {currentTrack.name}
+        </div>
+        by
+        <div>
+          {currentTrack.artists.map(a => a.name).join(' and ')}
+        </div>
+        ?
+        <div>
+          <button onClick={this.handleClick}>Skip</button>
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ tracks: { loading } }: AppState) => ({ loading });
+const mapStateToProps = ({ tracks: { loading, tracks } }: AppState) => ({ loading, tracks });
 
 export default connect(mapStateToProps)(Play);

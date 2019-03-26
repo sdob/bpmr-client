@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TRACKS_FETCHING, TRACKS_RECEIVED } from "./types";
+import { START_NEXT_TRACK, TRACKS_FETCHING, TRACKS_RECEIVED } from "./types";
 import { AppState } from "../App";
 
 export function fetchTracks() {
@@ -12,4 +12,8 @@ export function fetchTracks() {
     );
     dispatch({ type: TRACKS_RECEIVED, payload: response.data.items });
   };
+}
+
+export function startNextTrack() {
+  return (dispatch: Function) => dispatch({ type: START_NEXT_TRACK });
 }
