@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { AppState } from "../App";
 import { connect } from "react-redux";
-import { fetchTracks, startNextTrack } from "./actions";
-import { Track } from "./types";
+import { fetchTracks, startNextTrack, submitAnswer } from "./actions";
+import { Step, Track } from "./types";
+import Sending from "./Sending";
+import Result from './Result';
+import Challenge from "./Challenge";
+import { logoutSuccess } from "../auth/actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRedoAlt } from "@fortawesome/free-solid-svg-icons/faRedoAlt";
 
 interface PlayProps {
   dispatch: Function;
@@ -10,49 +16,87 @@ interface PlayProps {
   tracks: Track[];
 }
 
-export class Play extends Component<PlayProps> {
-  componentDidMount = async () => {
-    const { dispatch } = this.props;
-    await dispatch(fetchTracks());
+
+interface PlayState {
+  currentStep: Step;
+  sending: boolean;
+}
+
+export class Play extends Component<PlayProps, PlayState> {
+  mounted = false
+
+  state = {
+    currentStep: Step.Challenge,
+    sending: false,
   }
 
-  handleClick = async () => {
+  componentDidMount = async () => {
+    this.mounted = true;
+    const { dispatch } = this.props;
+    try {
+      await dispatch(fetchTracks());
+    } catch (e) {
+      await dispatch(logoutSuccess());
+    }
+  }
+
+  componentWillUnmount = () => {
+    this.mounted = false;
+  }
+
+  handleSkip = async () => {
     const { dispatch } = this.props;
     await dispatch(startNextTrack());
   }
 
+  handleSubmit = async ({ bpm }: { bpm: string }) => {
+    this.setState({ sending: true });
+    const { dispatch, tracks } = this.props;
+    const [{ id },] = tracks;
+    await dispatch(submitAnswer({ bpm: parseFloat(bpm), id }));
+    this.setStateIfMounted({
+      sending: false,
+      currentStep: Step.Result,
+    });
+  }
+
+  setStateIfMounted = (state: any) => {
+    if (this.mounted) {
+      this.setState(state);
+    }
+  }
+
   render = () => {
     const { loading, tracks } = this.props;
-    const [currentTrack,] = tracks;
+    const { currentStep } = this.state;
+
     if (loading || !tracks.length) {
       return (
         <div className="Play Play--loading">
-          <h1>
-            loading
-          </h1>
+          <FontAwesomeIcon icon={faRedoAlt} size="lg" spin />
         </div>
       );
     }
 
-    return (
-      <div className="Play">
-        What's the bpm of
-        <div>
-          {currentTrack.name}
+    switch (currentStep) {
+      case Step.Result:
+        return <Result />;
+      case Step.Sending:
+        return <Sending />;
+      default:
+        return <Challenge onSubmit={this.handleSubmit} onSkip={this.handleSkip} />;
+    }
+
+    /*
+    if (sending) {
+      return (
+        <div className="Play">
+          <Sending />
         </div>
-        by
-        <div>
-          {currentTrack.artists.map(a => a.name).join(' and ')}
-        </div>
-        ?
-        <div>
-          <input type="text" />
-        </div>
-        <div style={{ marginTop: '2rem' }}>
-          <button onClick={this.handleClick}>Skip</button>
-        </div>
-      </div>
-    );
+      );
+    }
+    */
+
   }
 }
 

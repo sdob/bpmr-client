@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { START_NEXT_TRACK, TRACKS_FETCHING, TRACKS_RECEIVED } from "./types";
+import { Answer, START_NEXT_TRACK, TRACKS_FETCHING, TRACKS_RECEIVED } from "./types";
 import { AppState } from "../App";
 
 export function fetchTracks() {
@@ -11,6 +11,19 @@ export function fetchTracks() {
       { headers: { Authorization: `Bearer ${token}` } },
     );
     dispatch({ type: TRACKS_RECEIVED, payload: response.data.items });
+  };
+}
+
+export function submitAnswer(answer: Answer) {
+  return async () => {
+    console.info('submitting');
+    const { data } = await axios.post(
+      'http://localhost:8000/songs/check/',
+      answer,
+    );
+    // await new Promise(resolve => setTimeout(resolve, 2000));
+    console.info('finished');
+    return data;
   };
 }
 
