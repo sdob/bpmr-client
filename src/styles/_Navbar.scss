@@ -1,0 +1,14 @@
+@import 'palette';
+@import 'variables';
+
+.Navbar {
+  align-items: center;
+  // background: $palette-1;
+  display: flex;
+  height: $navbar-height;
+  padding-left: 1rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 1rem);
+}
