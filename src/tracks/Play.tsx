@@ -46,6 +46,9 @@ export class Play extends Component<PlayProps> {
         </div>
         ?
         <div>
+          <input type="text" />
+        </div>
+        <div style={{ marginTop: '2rem' }}>
           <button onClick={this.handleClick}>Skip</button>
         </div>
       </div>

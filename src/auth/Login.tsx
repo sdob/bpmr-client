@@ -12,6 +12,8 @@ export class Login extends Component<LoginProps> {
   handleSuccess = (response: LoginSuccess) => {
     const { dispatch } = this.props;
     dispatch(loginSuccess(response));
+    const { access_token: token } = response;
+    window.localStorage.setItem('token', token);
   }
 
   render() {

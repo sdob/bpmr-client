@@ -6,8 +6,10 @@ import Play from "./tracks/Play";
 import { connect } from "react-redux";
 import { AuthState } from "./auth/types";
 import { TrackState } from "./tracks/types";
+import { loginSuccess } from "./auth/actions";
 
 interface AppProps {
+  dispatch: Function;
   token: string;
 }
 
@@ -17,6 +19,14 @@ export interface AppState {
 }
 
 class App extends Component<AppProps> {
+  componentDidMount(): void {
+    const { dispatch } = this.props;
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      dispatch(loginSuccess({ access_token: token }));
+    }
+  }
+
   render() {
     const { token } = this.props;
 
