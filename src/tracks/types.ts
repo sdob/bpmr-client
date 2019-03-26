@@ -2,6 +2,16 @@ export const TRACKS_FETCHING = 'tracks/TRACKS_FETCHING';
 export const TRACKS_RECEIVED = 'tracks/TRACKS_RECEIVED';
 export const START_NEXT_TRACK = 'tracks/START_NEXT_TRACK';
 
+export interface Image {
+  height: number;
+  url: string;
+  width: number;
+}
+
+export interface Album {
+  images: Image[];
+}
+
 export interface Answer {
   bpm: number;
   id: string;
@@ -12,6 +22,7 @@ export interface Artist {
 }
 
 export interface Track {
+  album: Album;
   artists: Artist[];
   id: string;
   name: string;

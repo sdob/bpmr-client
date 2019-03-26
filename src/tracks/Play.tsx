@@ -16,9 +16,16 @@ interface PlayProps {
   tracks: Track[];
 }
 
+export interface Results {
+  bpm: number;
+  score: number;
+  trueBpm: number;
+}
+
 
 interface PlayState {
   currentStep: Step;
+  results: Results | undefined;
   sending: boolean;
 }
 
@@ -27,6 +34,7 @@ export class Play extends Component<PlayProps, PlayState> {
 
   state = {
     currentStep: Step.Challenge,
+    results: undefined,
     sending: false,
   }
 
@@ -49,14 +57,17 @@ export class Play extends Component<PlayProps, PlayState> {
     await dispatch(startNextTrack());
   }
 
-  handleSubmit = async ({ bpm }: { bpm: string }) => {
+  handleSubmit = async ({ bpm }: { bpm: number }) => {
     this.setState({ sending: true });
     const { dispatch, tracks } = this.props;
     const [{ id },] = tracks;
-    await dispatch(submitAnswer({ bpm: parseFloat(bpm), id }));
+    const { score, true_bpm: trueBpm } = await dispatch(submitAnswer({ bpm, id }));
+    console.info('results');
+    console.info(bpm, score, trueBpm);
     this.setStateIfMounted({
       sending: false,
       currentStep: Step.Result,
+      results: { bpm, score, trueBpm },
     });
   }
 
@@ -68,7 +79,7 @@ export class Play extends Component<PlayProps, PlayState> {
 
   render = () => {
     const { loading, tracks } = this.props;
-    const { currentStep } = this.state;
+    const { currentStep, results } = this.state;
 
     if (loading || !tracks.length) {
       return (
@@ -80,7 +91,7 @@ export class Play extends Component<PlayProps, PlayState> {
 
     switch (currentStep) {
       case Step.Result:
-        return <Result />;
+        return <Result {...results} />;
       case Step.Sending:
         return <Sending />;
       default:
