@@ -83,6 +83,7 @@ export class Play extends Component<PlayProps, PlayState> {
   render = () => {
     const { loading, tracks } = this.props;
     const { currentStep, results } = this.state;
+    const [currentTrack,] = tracks;
 
     if (loading || !tracks.length) {
       return (
@@ -94,23 +95,12 @@ export class Play extends Component<PlayProps, PlayState> {
 
     switch (currentStep) {
       case Step.Result:
-        return <Result {...results} onStartNextTrack={this.handleSkip} />;
+        return <Result {...results} track={currentTrack} onStartNextTrack={this.handleSkip} />;
       case Step.Sending:
         return <Sending />;
-      default:
+      default: // Step.Challenge
         return <Challenge onSubmit={this.handleSubmit} onSkip={this.handleSkip} />;
     }
-
-    /*
-    if (sending) {
-      return (
-        <div className="Play">
-          <Sending />
-        </div>
-      );
-    }
-    */
-
   }
 }
 

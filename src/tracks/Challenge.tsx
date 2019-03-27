@@ -1,14 +1,10 @@
-import React, { Component, Fragment } from 'react';
-import classnames from 'classnames';
-import CircularProgressbar from 'react-circular-progressbar';
+import React, { Component } from 'react';
 
 import 'react-circular-progressbar/dist/styles.css';
 
 import { Track } from "./types";
 import { connect } from "react-redux";
 import { AppState } from "../App";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRedoAlt } from "@fortawesome/free-solid-svg-icons/faRedoAlt";
 import SongDetails from "./SongDetails";
 import TapTarget from "./TapTarget";
 import SkipButton from "./SkipButton";
