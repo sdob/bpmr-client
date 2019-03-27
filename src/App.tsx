@@ -18,7 +18,7 @@ export interface AppState {
   tracks: TrackState;
 }
 
-class App extends Component<AppProps> {
+export class App extends Component<AppProps> {
   componentDidMount(): void {
     const { dispatch } = this.props;
     const token = window.localStorage.getItem('token');
