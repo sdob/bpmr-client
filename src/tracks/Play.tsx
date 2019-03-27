@@ -57,7 +57,6 @@ export class Play extends Component<PlayProps, PlayState> {
   }
 
   handleNextTrack = async () => {
-    console.info('next track');
     const { dispatch } = this.props;
     await dispatch(startNextTrack());
     this.setState({ currentStep: Step.Challenge });
@@ -68,8 +67,6 @@ export class Play extends Component<PlayProps, PlayState> {
     const { dispatch, tracks } = this.props;
     const [{ id },] = tracks;
     const { score, true_bpm: trueBpm } = await dispatch(submitAnswer({ bpm, id }));
-    console.info('results');
-    console.info(bpm, score, trueBpm);
     this.setStateIfMounted({
       sending: false,
       currentStep: Step.Result,
