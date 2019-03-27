@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 import 'react-circular-progressbar/dist/styles.css';
 
-import { Track } from "./types";
+import { Track } from "../types";
 import { connect } from "react-redux";
-import { AppState } from "../App";
-import SongDetails from "./SongDetails";
+import { AppState } from "../../App";
+import SongDetails from "../SongDetails";
 import TapTarget from "./TapTarget";
 import SkipButton from "./SkipButton";
 

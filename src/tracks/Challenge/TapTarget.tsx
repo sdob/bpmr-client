@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import CircularProgressbar from "react-circular-progressbar";
 import { faRedoAlt } from "@fortawesome/free-solid-svg-icons/faRedoAlt";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TAPS_NEEDED } from "./constants";
+import { TAPS_NEEDED } from "../constants";
 
 interface Props {
   onTap: (_: any) => void;
