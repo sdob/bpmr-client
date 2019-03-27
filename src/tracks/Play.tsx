@@ -53,8 +53,14 @@ export class Play extends Component<PlayProps, PlayState> {
   }
 
   handleSkip = async () => {
+    await this.handleNextTrack();
+  }
+
+  handleNextTrack = async () => {
+    console.info('next track');
     const { dispatch } = this.props;
     await dispatch(startNextTrack());
+    this.setState({ currentStep: Step.Challenge });
   }
 
   handleSubmit = async ({ bpm }: { bpm: number }) => {
@@ -91,7 +97,7 @@ export class Play extends Component<PlayProps, PlayState> {
 
     switch (currentStep) {
       case Step.Result:
-        return <Result {...results} />;
+        return <Result {...results} onStartNextTrack={this.handleSkip} />;
       case Step.Sending:
         return <Sending />;
       default:

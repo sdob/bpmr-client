@@ -1,0 +1,1 @@
+export const TAPS_NEEDED = 16;

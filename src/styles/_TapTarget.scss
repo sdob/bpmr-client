@@ -1,0 +1,11 @@
+@import 'variables';
+
+.TapTarget {
+  height: 80px;
+  width: 80px;
+
+  @media (min-width: $screen-sm-up) {
+    height: 250px;
+    width: 250px;
+  }
+}

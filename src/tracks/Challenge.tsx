@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import classnames from 'classnames';
 import CircularProgressbar from 'react-circular-progressbar';
 
 import 'react-circular-progressbar/dist/styles.css';
@@ -8,6 +9,9 @@ import { connect } from "react-redux";
 import { AppState } from "../App";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRedoAlt } from "@fortawesome/free-solid-svg-icons/faRedoAlt";
+import SongDetails from "./SongDetails";
+import TapTarget from "./TapTarget";
+import SkipButton from "./SkipButton";
 
 const TAPS_NEEDED = 16;
 
@@ -46,10 +50,7 @@ export class Challenge extends Component<Props, State> {
     window.removeEventListener('keydown', this.handleKeyPress);
   }
 
-  handleKeyPress = ({ key }: any) => {
-    if (key !== ' ') {
-      return;
-    }
+  handleBeat = () => {
     const { started, timestamps } = this.state;
     if (!started) {
       console.info('started!');
@@ -71,6 +72,22 @@ export class Challenge extends Component<Props, State> {
         onSubmit({ bpm });
       });
     });
+  }
+
+  handleKeyPress = ({ key }: any) => {
+    if (key !== ' ') {
+      return;
+    }
+    return this.handleBeat();
+  }
+
+  handleSkip = (_: any) => {
+    const { onSkip } = this.props;
+    const { started } = this.state;
+    if (started) {
+      return;
+    }
+    onSkip(_);
   }
 
   computeBpm = () => {
@@ -95,67 +112,25 @@ export class Challenge extends Component<Props, State> {
   }
 
   render = () => {
-    const {
-      onSkip,
-      tracks: [currentTrack,],
-    } = this.props;
-
-    const { finished, timestamps } = this.state;
-
+    const { tracks: [currentTrack,] } = this.props;
+    const { finished, started, timestamps } = this.state;
     const percentage = 100 * Math.min(1, timestamps.length / TAPS_NEEDED);
-
-    console.info('percentage: ' + percentage);
 
     return (
       <div className="Play">
-        <h1>
-          What's the BPM of...
-        </h1>
-        <div>
-          <img
-            height={250}
-            src={currentTrack.album.images[0].url}
-            width={250}
-            alt={``}
+        <div style={{ textAlign: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
+          Tap to the music in your head
+        </div>
+        <div className="SongAndTapContainer">
+          <SongDetails {...currentTrack} />
+          <TapTarget
+            percentage={percentage}
+            finished={finished}
+            timestamps={timestamps}
+            onTap={this.handleBeat}
           />
         </div>
-        <div style={{ display: 'flex' }}>
-          {currentTrack.name}
-          {' '}
-          by
-          {' '}
-          {currentTrack.artists.map(a => a.name).join(' and ')}
-          ?
-        </div>
-        <div>
-          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-            Tap in time to the music!
-          </div>
-          <div style={{ width: '50%', marginTop: '1rem', marginLeft: 'auto', marginRight: 'auto' }}>
-            {timestamps.length < TAPS_NEEDED && (
-              <Fragment>
-                <div onClick={this.handleKeyPress} style={{ borderRadius: '50%' }}>
-                  <CircularProgressbar
-                    strokeWidth={5}
-                    styles={{ path: { transition: 'stroke-dashoffset 0.1s ease 0s' } }}
-                    percentage={percentage}
-                    text={`${Math.round(percentage)}`}
-                  />
-                </div>
-              </Fragment>
-            )}
-            {finished && (
-              <div style={{ textAlign: 'center' }}>
-                <FontAwesomeIcon icon={faRedoAlt} size="lg" spin />
-              </div>
-            )}
-          </div>
-        </div>
-        {false && (
-          <div style={{ marginTop: '2rem' }}>
-            <button onClick={onSkip}>Skip</button>
-          </div>
-        )}
+        <SkipButton started={started} onClick={this.handleSkip} />
       </div>
     );
   }

@@ -10,6 +10,7 @@ export interface Image {
 
 export interface Album {
   images: Image[];
+  name: string;
 }
 
 export interface Answer {

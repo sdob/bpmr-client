@@ -1,8 +1,18 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/_reboot';
+
 @import 'palette';
 
+@import 'Button';
 @import 'Login';
 @import 'Navbar';
 @import 'Play';
+@import 'Result';
+@import 'Song';
+@import 'SongAndTapContainer';
+@import 'TapTarget';
 
 body {
   background: $body-background-color;

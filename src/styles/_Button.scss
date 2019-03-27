@@ -1,0 +1,26 @@
+$button-transition-duration: .2s;
+
+.Button {
+  background: $spotify-background-color;
+  border: solid 1px #fff;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 24px;
+  min-height: 24px;
+  padding-bottom: .5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: .5rem;
+  text-transform: uppercase;
+  transition: color $button-transition-duration, background-color $button-transition-duration;
+
+  &:active {
+    background-color: #fff;
+    color: $spotify-background-color;
+  }
+}
+
+.Button--hidden {
+  opacity: 0;
+  transition: opacity .5s;
+}
